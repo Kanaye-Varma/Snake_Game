@@ -10,6 +10,9 @@ import random, time
 from _tkinter import TclError
 
 # Global variables
+HEIGHT = 600
+WIDTH = 800
+
 snake = [[50,50]] 
 head = 0
 tail = 0
@@ -47,7 +50,7 @@ def move_snake(window : tk.Canvas):
     game_over_conditions = [
         snake[head+1] in snake[tail:head+1],
         snake[head+1][0] < 0 or snake[head+1][1] < 0,
-        snake[head+1][0] >= 800 or snake[head+1][1] >= 750,
+        snake[head+1][0] >= WIDTH or snake[head+1][1] >= HEIGHT,
     ]
     if any(game_over_conditions): raise TclError()
 
@@ -76,7 +79,8 @@ def apple(window: tk.Canvas):
     '''Creates a new apple randomly'''
     global snake, apple_pos
     while 1:
-        x, y = 50*random.randint(1,10), 50*random.randint(1,10)
+        x = 50 * random.randint(1, int(WIDTH/50)-1)
+        y = 50 * random.randint(1, int(HEIGHT/50)-1)
         if [x, y] in snake[tail:head+1]: continue
         else: 
             apple_pos = [x,y]
@@ -99,7 +103,7 @@ if __name__ == '__main__':
     root.config(height=800, width=800)
     root.title("Snake Game")
 
-    window = tk.Canvas(root, height=750, width=800, bg="#00aeff")
+    window = tk.Canvas(root, height=HEIGHT, width=WIDTH, bg="#00aeff")
     
     # Initialise snake and apple
     draw(window, head)
@@ -120,8 +124,9 @@ if __name__ == '__main__':
             time.sleep(t)
         except TclError: # end the game
             print(f"Game Over.\nScore: {score}\n\nThanks for playing!")
-            break
+            break 
         except KeyboardInterrupt:
             print(f"Uh-oh, the game ended!")
         except:
             print("Oops, looks like there was an error!")
+            break
